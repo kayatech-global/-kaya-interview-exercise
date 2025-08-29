@@ -1,0 +1,3 @@
+terraform_dir: "../terraform"
+
+region: "us-east-1"

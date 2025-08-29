@@ -1,0 +1,25 @@
+---
+- name: Run Terraform with Ansible
+  hosts: localhost
+  connection: local
+  vars_files:
+    - vars/global_vars.yml
+
+  tasks:
+ ## Write terraform execution here
+ ## Get terraform output and register as variables
+    -
+
+    - name: Show extracted values
+      debug:
+        msg:
+          - "VPC ID: {{ vpc_id }}"
+          - "Public Subnet ID: {{ public_subnet_id }}"
+
+    - name: Describe subnet with AWS CLI
+      command: aws ec2 describe-subnets --subnet-ids {{ public_subnet_id }} --region {{ region }}
+      register: subnet_desc
+
+    - name: Print subnet details
+      debug:
+        msg: "{{ subnet_desc.stdout }}"
