@@ -1,0 +1,27 @@
+name: Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - "**"
+  workflow_dispatch:
+
+jobs:
+  run-commands:
+    runs-on: ubuntu-latest
+    environment: dev
+    container:
+      image: public.ecr.aws/g9a4e1d0/kayatech/devops:latest
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Ansible Playbook
+        run: |
+          ansible-playbook -i inventory.ini ansible/playbook.yml -vvvv
